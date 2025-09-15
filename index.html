@@ -287,6 +287,201 @@ RIO PTN V2 is a cutting-edge AI-powered prediction system designed to deliver ac
         // AI+Human Brain Pattern Generation
         const generateBasePatterns = () => {
             const basePatterns = [
+                'BBBBBBBBB', 'SSSSSSSSS', 'BBBBSSSSS', 'SSSSBBBBB',
+                'BBBSSSSBB', 'SSSBBBSSS', 'BBSSBBSSB', 'SSBBSBBSS',
+                'BSBSBSBSB', 'SBSBSBSBS', 'BBSBBSBBS', 'SSBSSBSSB',
+                'BBSSBBSSB', 'SSBBSSBBS', 'BSSBSSBSS', 'SBBSBBSBB',
+                'BBBBSSSBB', 'SSSSBBBSS', 'BBBSSSSBB', 'SSSBBBSSS',
+                'BBSSSSBBS', 'SSBBBBSSB', 'BSSSSBSSB', 'SBBBBSSBS',
+                'BBSSBSSBB', 'SSBBSBBSS', 'BSSBBSSBS', 'SBBSBBSBB',
+                'BBSBSSBBS', 'SSBSBSSBS', 'BSBSSBSBS', 'SBSBBSBSB',
+                'BBSSBBSBB', 'SSBBSBBSS', 'BSSBBSBBS', 'SBBSSBBSS',
+                'BBSBBSSBB', 'SSBBSSBBS', 'BSBBSBSBS', 'SBSBSSBSB',
+                'BBSSSSBBB', 'SSBBBBSSS', 'BBSBBBSSB', 'SSBSSBBSB',
+                'BBBSSSBBB', 'SSSBBBSSS', 'BBSSBBSSB', 'SSBBSBBSS',
+                
+                // 10-digit patterns
+                'BBBBBBBBBB', 'SSSSSSSSSS', 'BBBBSSSSSS', 'SSSSBBBBBB',
+                'BBBSSSSBBB', 'SSSBBBSSSB', 'BBSSBBSSBB', 'SSBBSSBBSS',
+                'BSBSBSBSBS', 'SBSBSBSBSB', 'BBSBBSBBSB', 'SSBSSBSSBS',
+                'BBSSBBSSBB', 'SSBBSSBBSS', 'BSSBBSSBSS', 'SBBSSBBSSB',
+                'BBBBSSSSBB', 'SSSSBBBBSS', 'BBBSSSSBBB', 'SSSBBBSSSB',
+                'BBSSSSBBSS', 'SSBBBBSSBB', 'BSSSSBSSSB', 'SBBBBSSBBS',
+                'BBBSBSBSBB', 'SSSBBSBSSS', 'BSBBBSBBBS', 'SBSSSBSSSB',
+                'BBSBBBSBBB', 'SSBSSSBSSS', 'BBBBBSBBBB', 'SSSSSBSSSS',
+                'BBBBSSBBBB', 'SSSSBBSSSS', 'BBBSSBBBBB', 'SSSBBSSSSS',
+                'BBSSBBBBBB', 'SSBBSSSSSS', 'BSSBSSBSSB', 'SBSBSBSBSB'
+            ];
+            return basePatterns;
+        };
+
+        const generateHumanInspiredPatterns = () => {
+            const humanPatterns = [];
+            const sequences = ['BS', 'SB', 'BBSS', 'SSBB', 'BBS', 'SSB', 'BSB', 'SBS'];
+            
+            for (let i = 0; i < 300; i++) {
+                let pattern = '';
+                let lastChar = null;
+                let streakCount = 0;
+                const length = Math.random() < 0.2 ? 8 : Math.random() < 0.4 ? 9 : 10; // 20% 8-digit, 20% 9-digit, 60% 10-digit
+                
+                for (let j = 0; j < length; j++) {
+                    let nextChar;
+                    if (streakCount >= 2 && Math.random() < 0.7) {
+                        nextChar = getOpposite(lastChar);
+                    } else {
+                        nextChar = sequences[Math.floor(Math.random() * sequences.length)][j % 2] || (Math.random() < 0.5 ? 'B' : 'S');
+                    }
+                    
+                    if (j >= length - 2) {
+                        const currentBs = pattern.split('').filter(c => c === 'B').length;
+                        const currentSs = pattern.split('').filter(c => c === 'S').length;
+                        if (Math.abs(currentBs - currentSs) > 2) {
+                            nextChar = currentBs > currentSs ? 'S' : 'B';
+                        }
+                    }
+                    
+                    pattern += nextChar;
+                    if (nextChar === lastChar) streakCount++;
+                    else streakCount = 1;
+                    lastChar = nextChar;
+                }
+                
+                if (pattern.length === length) humanPatterns.push(pattern);
+            }
+            
+            return humanPatterns;
+        };
+
+        const generateTransformedPatterns = (basePatterns) => {
+            const transforms = [
+                p => p.split('').reverse().join(''),
+                p => p.substring(1) + p[0],
+                p => p[p.length-1] + p.substring(0, p.length-1),
+                p => p.replace(/B{3}/g, 'SBS').replace(/S{3}/g, 'BSB'),
+                p => p.replace(/B{2}/g, 'SB').replace(/S{2}/g, 'BS'),
+                p => p.replace(/B/g, 'X').replace(/S/g, 'B').replace(/X/g, 'S'),
+                p => p.split('').map((c,i) => i%2===0 ? c : getOpposite(c)).join(''),
+                p => p.split('').map((c,i) => i%3===0 ? getOpposite(c) : c).join(''),
+                p => p.split('').map((c,i) => i%4===0 ? c : getOpposite(c)).join(''),
+                p => p.split('').map((c,i) => i%5===0 ? getOpposite(c) : c).join(''),
+                p => p.split('').map((c,i) => i%6===0 ? c : getOpposite(c)).join(''),
+                p => p.split('').map((c,i) => Math.random() < 0.1 ? getOpposite(c) : c).join(''),
+                p => p.substring(2) + p.slice(0,2),
+                p => p.slice(-2) + p.substring(0, p.length-2),
+                p => p.replace(/BSBS/g, 'SBBS').replace(/SBSB/g, 'BSSB'),
+                p => p.replace(/BBSS/g, 'SSBB').replace(/SSBB/g, 'BBSS'),
+                p => p.split('').map((c,i) => Math.random() < 0.15 ? getOpposite(c) : c).join('')
+            ];
+
+            let patterns = [...basePatterns];
+            basePatterns.forEach(p => {
+                transforms.forEach(t => {
+                    const transformed = t(p);
+                    if (transformed.length >= 8) patterns.push(transformed); // Ensure at least 8 digits
+                });
+            });
+            return patterns;
+        };
+
+        const generateDynamicPatterns = () => {
+            const dynamicPatterns = [];
+            const basePatterns = generateBasePatterns();
+            const sequences = ['BS', 'SB', 'BBSS', 'SSBB', 'BBS', 'SSB', 'BSB', 'SBS'];
+            
+            for (let i = 0; i < 500; i++) {
+                let pattern = '';
+                const length = Math.random() < 0.2 ? 8 : Math.random() < 0.4 ? 9 : 10; // 20% 8-digit, 20% 9-digit, 60% 10-digit
+                for (let j = 0; j < length; j++) {
+                    pattern += sequences[Math.floor(Math.random() * sequences.length)][j % 2];
+                }
+                if (pattern.length === length) dynamicPatterns.push(pattern);
+            }
+            
+            if (state.history.length > 10) {
+                const historicalPatterns = state.history
+                    .slice(0, 50)
+                    .map(item => item.pattern)
+                    .filter(p => p && p.length >= 8);
+                dynamicPatterns.push(...historicalPatterns);
+            }
+            
+            return dynamicPatterns;
+        };
+
+        const generateAIHumanDeepPatterns = () => {
+            const basePatterns = generateBasePatterns();
+            const humanPatterns = generateHumanInspiredPatterns();
+            const transformedPatterns = generateTransformedPatterns(basePatterns);
+            const dynamicPatterns = generateDynamicPatterns();
+            
+            let allPatterns = [...new Set([...basePatterns, ...humanPatterns, ...transformedPatterns, ...dynamicPatterns])].filter(pattern => {
+                if (pattern.match(/(B{4,}|S{4,})/g)) return false;
+                const transitions = (pattern.match(/BS|SB/g) || []).length;
+                if (transitions < 3) return false;
+                const bCount = (pattern.match(/B/g) || []).length;
+                const sCount = (pattern.match(/S/g) || []).length;
+                return Math.abs(bCount - sCount) <= 3 && pattern.length >= 8;
+            });
+            
+            while (allPatterns.length < 1000) {
+                const randomPattern = generateDynamicPatterns()[0];
+                if (!allPatterns.includes(randomPattern)) allPatterns.push(randomPattern);
+            }
+            
+            state.stats.aiPatternsGenerated = allPatterns.length;
+            state.stats.tenDigitPatterns = allPatterns.filter(p => p.length === 10).length;
+            state.stats.nineDigitPatterns = allPatterns.filter(p => p.length === 9).length;
+            state.stats.eightDigitPatterns = allPatterns.filter(p => p.length === 8).length;
+            state.stats.neuralPatterns = dynamicPatterns.length;
+            state.stats.humanPatterns = humanPatterns.length;
+            state.stats.quantumPatterns = allPatterns.length - basePatterns.length - transformedPatterns.length - humanPatterns.length;
+            
+            return allPatterns.slice(0, 1500);
+        };
+
+        const predictionPatterns = generateAIHumanDeepPatterns();
+
+        // Sureshot Verification
+        const isTrueSureshot = (pattern, currentPattern, matchCount, lastSegmentMatch) => {
+            if (matchCount >= 10) {
+                const patternStats = state.patternStats[pattern] || { count: 0, wins: 0 };
+                if (patternStats.count > 0 && patternStats.wins !== patternStats.count) return false;
+                const similarPatterns = predictionPatterns.filter(p => 
+                    p !== pattern && 
+                    p.startsWith(currentPattern.substring(0, Math.min(7, currentPattern.length))) &&
+                    p.endsWith(currentPattern.slice(-Math.min(3, currentPattern.length)))
+                );
+                return similarPatterns.length <= 2;
+            }
+
+            if (matchCount >= 9) {
+                const patternStats = state.patternStats[pattern] || { count: 0, wins: 0 };
+                if (patternStats.count >= 5 && patternStats.wins / patternStats.count < 0.9) return false;
+                return currentPattern.endsWith(pattern.slice(-Math.min(3, pattern.length)));
+            }
+
+            return false;
+        };
+
+        const isUltraSureshot = (pattern, currentPattern, matchCount) => {
+            if (matchCount >= 9.5) {
+                const patternStats = state.patternStats[pattern] || { count: 0, wins: 0 };
+                if _SURESHOT_MIN_WIN_RATE = 0.95;
+
+        // Utility Functions
+        const getSize = (result) => result >= 5 ? 'B' : 'S';
+        const getOpposite = (size) => size === 'B' ? 'S' : 'B';
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('predictionHistory', JSON.stringify(state.history));
+            localStorage.setItem('patternStats', JSON.stringify(state.patternStats));
+        }
+
+        // AI+Human Brain Pattern Generation
+        const generateBasePatterns = () => {
+            const basePatterns = [
                 'BBBBBBBBBB', 'SSSSSSSSSS',
                 'BBBBBBSSSS', 'SSSSSSBBBB',
                 'BBBBSSSSBB', 'SSSSBBBBSS',
